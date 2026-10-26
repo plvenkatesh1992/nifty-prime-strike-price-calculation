@@ -1,0 +1,11 @@
+{
+  "watch": [
+    "app.js"
+  ],
+  "ignore": [
+    "nifty-strike-prices/*",
+    "*.json",
+    "node_modules"
+  ],
+  "ext": "js"
+}
