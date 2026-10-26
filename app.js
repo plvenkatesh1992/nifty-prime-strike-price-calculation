@@ -9,10 +9,12 @@ const { drawLinesOnDhan } = require('./dhan-draw');
 // ===========================================================================
 const CONFIG = {
   // Telegram Bot Credentials
-  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || '8890589244:AAFAogU5cSJV2Ag0P6Zc2FRUntms_3cXZf8',
+  // TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || '8890589244:AAFAogU5cSJV2Ag0P6Zc2FRUntms_3cXZf8',
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
   // ALLOWED_CHAT_ID: process.env.ALLOWED_CHAT_ID || '5881579500',
   // Allow both your personal DM and your Telegram Group IDs (comma-separated)
-  ALLOWED_CHAT_IDS: (process.env.ALLOWED_CHAT_IDS || '5881579500,-1001234567890').split(',').map((id) => id.trim()),
+  ALLOWED_CHAT_IDS: (process.env.ALLOWED_CHAT_IDS).split(',').map((id) => id.trim()),
+  // ALLOWED_CHAT_IDS: (process.env.ALLOWED_CHAT_IDS || '5881579500,-1001234567890').split(',').map((id) => id.trim()),
 
   // Commands Configuration
   COMMANDS: {
@@ -1019,7 +1021,11 @@ async function executeLevelsTask(chatId, manualSpot = null, forceRefresh = false
     await sendMessage(chatId, `❌ <b>Error:</b> ${error.message}`);
   } finally {
     isRunning = false;
-    await browser.close();
+    if (browser) {
+      // Disconnect the automation client, keep Chrome running
+      // await browser.close();
+      await browser.disconnect();
+    }
   }
 }
 
