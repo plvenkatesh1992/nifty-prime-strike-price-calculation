@@ -1,15 +1,17 @@
 {
-  "name": "nse-fetch-settlement-price-bot",
+  "name": "nifty-prime-strike-calculation",
   "version": "1.0.0",
-  "description": "",
+  "description": "nifty prime strike settlement price CALL/ PUT calculation",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon --ignore nifty-strike-prices/ app.js",
+    "start": "node --env-file=.env app.js",
+    "dev": "nodemon --env-file=.env app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "axios": "^1.20.0",
     "node-telegram-bot-api": "^2.1.0",
