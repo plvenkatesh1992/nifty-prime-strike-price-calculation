@@ -281,21 +281,33 @@ function calculateColorLevels(spotPrice, levelsData) {
 function formatColorLevelsTelegramMessage(data, spotPrice, expiryDate, tradeDate = null) {
   const { call, put } = data;
 
+  // Format today's date as DD-MMM-YYYY (e.g., 27-Oct-2026)
+  const today = new Date();
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const dayStr = String(today.getDate()).padStart(2, '0');
+  const monthStr = months[today.getMonth()];
+  const yearStr = today.getFullYear();
+  const currentTradeDate = `${dayStr}-${monthStr}-${yearStr}`;
+
   const formatTargets = (targets) => {
-    return targets.map((val, idx) => `<b>T${idx + 1}:</b> <code>${val}</code>`).join('  |  ');
+    return (targets || [])
+      .filter((val) => val !== 'N/A' && val !== null && !isNaN(val))
+      .map((val, idx) => `<b>T${idx + 1}:</b> <code>${val}</code>`)
+      .join('  |  ');
   };
 
-  let message = `🎯 <b><u>NIFTY CALL/PUT KEY LEVELS ANALYSIS</u></b>\n\n`;
+  const expPrefix = expiryDate ? `${expiryDate} ` : '';
 
-  if (tradeDate) {
-    message += `📅 <b>Trade Date:</b> ${tradeDate}\n`;
-  }
-  message += `🔹 <b>Spot Price:</b> ${spotPrice}\n`;
-  message += `🔹 <b>Target Expiry:</b> ${expiryDate}\n\n`;
+  // Header metadata in the exact requested order
+  let message = `🎯 <b><u>NIFTY CALL/PUT KEY LEVELS ANALYSIS</u></b>\n\n`;
+  message += `• <b>Settlement Date:</b> <code>${tradeDate || 'N/A'}</code>\n`;
+  message += `• <b>Trade Date:</b> <code>${currentTradeDate}</code>\n`;
+  message += `• <b>Pre-Open Spot:</b> <code>${spotPrice}</code>\n`;
+  message += `• <b>Current Expiry:</b> <code>${expiryDate || 'N/A'}</code>\n\n`;
   message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
   // CALL SECTION
-  message += `🟢 <b><u>CALL SIDE (${call.strike} CE)</u></b>\n`;
+  message += `🟢 <b><u>CALL SIDE (${expPrefix}${call.strike} CE)</u></b>\n`;
   message += `• <b>Green Line (Entry):</b> <code>${call.greenLine}</code>\n`;
   message += `• <b>Orange Line (Prime):</b> <code>${call.orangeLine}</code>\n`;
   message += `• <b>Black Line (Stop/Support):</b> <code>${call.blackLine}</code>\n`;
@@ -306,7 +318,7 @@ function formatColorLevelsTelegramMessage(data, spotPrice, expiryDate, tradeDate
   message += `╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌\n\n`;
 
   // PUT SECTION
-  message += `🔴 <b><u>PUT SIDE (${put.strike} PE)</u></b>\n`;
+  message += `🔴 <b><u>PUT SIDE (${expPrefix}${put.strike} PE)</u></b>\n`;
   message += `• <b>Green Line (Entry):</b> <code>${put.greenLine}</code>\n`;
   message += `• <b>Orange Line (Prime):</b> <code>${put.orangeLine}</code>\n`;
   message += `• <b>Black Line (Stop/Support):</b> <code>${put.blackLine}</code>\n`;
