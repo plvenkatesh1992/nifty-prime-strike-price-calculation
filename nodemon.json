@@ -1,11 +1,16 @@
 {
   "watch": [
-    "app.js"
+    "app.js",
+    "dhan-draw.js",
+    "dhan-test.js",
+    "linecalculation.js"
   ],
   "ignore": [
-    "nifty-strike-prices/*",
-    "*.json",
-    "node_modules"
+    "dhan-debug/**",
+    "dhan-profile/**",
+    "nifty-strike-prices/**",
+    "node_modules/**",
+    "*.json"
   ],
   "ext": "js"
 }
